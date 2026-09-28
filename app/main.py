@@ -8,7 +8,7 @@ from app.config import settings
 from app.database import engine, Base
 from app.api import (
     auth, dashboard, buses, routes, defects, traffic,
-    incidents, alerts, video, analytics, reports, settings as sys_settings, simulation
+    incidents, alerts, video, analytics, reports, settings as sys_settings, simulation, roadmetrics
 )
 from app.websocket.connection_manager import ws_manager
 from app.services.simulation_engine import simulation_engine
@@ -110,7 +110,8 @@ async def vercel_path_middleware(request, call_next):
 ALL_ROUTERS = [
     auth.router, dashboard.router, buses.router, routes.router, defects.router,
     traffic.router, incidents.router, alerts.router, video.router,
-    analytics.router, reports.router, sys_settings.router, simulation.router
+    analytics.router, reports.router, sys_settings.router, simulation.router,
+    roadmetrics.router
 ]
 
 for r in ALL_ROUTERS:
