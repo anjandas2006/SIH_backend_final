@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 import random
 from fastapi import APIRouter, Depends
@@ -60,8 +61,8 @@ async def control_simulation(payload: SimulationControl, db: Session = Depends(g
 
     elif payload.action == "trigger_incident":
         bus = db.query(Bus).filter(Bus.bus_number == "BUS-024").first() or db.query(Bus).first()
-        count = db.query(Incident).count() + 1
-        inc_code = f"INC-2026-{1000 + count}"
+        unique_suffix = uuid.uuid4().hex[:6].upper()
+        inc_code = f"INC-2026-{unique_suffix}"
         inc = Incident(
             incident_code=inc_code,
             incident_type="HIT_AND_RUN",
@@ -82,7 +83,7 @@ async def control_simulation(payload: SimulationControl, db: Session = Depends(g
 
         # Trigger corresponding alert
         alert = Alert(
-            alert_code=f"ALT-{1000 + count}",
+            alert_code=f"ALT-{unique_suffix}",
             alert_type="HIT_AND_RUN",
             severity="CRITICAL",
             title=f"Critical Incident ({inc_code})",
